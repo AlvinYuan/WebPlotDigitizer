@@ -41,7 +41,7 @@ wpd.AutoDetector = (function () {
         this.imageData = null;
         this.imageWidth = 0;
         this.imageHeight = 0;
-        
+
         this.reset = function () {
             this.mask = null;
             this.binaryData = null;
@@ -52,14 +52,16 @@ wpd.AutoDetector = (function () {
 
         this.generateBinaryDataFromMask = function () {
 
-            var maski, img_index, dist, 
+            var maski, img_index, dist,
                 ref_color = this.colorDetectionMode === 'fg' ? this.fgColor : this.bgColor;
 
             for(maski = 0; maski < this.mask.length; maski++) {
                 img_index = this.mask[maski];
-                dist = Math.sqrt( (this.imageData.data[img_index*4] - ref_color[0])*(this.imageData.data[img_index*4] - ref_color[0]) + 
-                    (this.imageData.data[img_index*4+1] - ref_color[1])*(this.imageData.data[img_index*4+1] - ref_color[1]) + 
-                    (this.imageData.data[img_index*4+2] - ref_color[2])*(this.imageData.data[img_index*4+2] - ref_color[2]));
+                var rgb = [this.imageData.data[img_index*4], this.imageData.data[img_index*4+1], this.imageData.data[img_index*4+2]]
+                dist = wpd.colorTools.colorDistance(ref_color, rgb)
+                // dist = Math.sqrt( (this.imageData.data[img_index*4] - ref_color[0])*(this.imageData.data[img_index*4] - ref_color[0]) +
+                //     (this.imageData.data[img_index*4+1] - ref_color[1])*(this.imageData.data[img_index*4+1] - ref_color[1]) +
+                //     (this.imageData.data[img_index*4+2] - ref_color[2])*(this.imageData.data[img_index*4+2] - ref_color[2]));
 
                 if(this.colorDetectionMode === 'fg') {
                     if(dist <= this.colorDistance) {
@@ -74,14 +76,16 @@ wpd.AutoDetector = (function () {
         };
 
         this.generateBinaryDataUsingFullImage = function () {
-            
+
             var dist, img_index,
-                ref_color = this.colorDetectionMode === 'fg' ? this.fgColor : this.bgColor; 
+                ref_color = this.colorDetectionMode === 'fg' ? this.fgColor : this.bgColor;
 
             for(img_index = 0; img_index < this.imageData.data.length/4; img_index++) {
-                dist = Math.sqrt( (this.imageData.data[img_index*4] - ref_color[0])*(this.imageData.data[img_index*4] - ref_color[0]) + 
-                    (this.imageData.data[img_index*4+1] - ref_color[1])*(this.imageData.data[img_index*4+1] - ref_color[1]) + 
-                    (this.imageData.data[img_index*4+2] - ref_color[2])*(this.imageData.data[img_index*4+2] - ref_color[2]));
+                var rgb = [this.imageData.data[img_index*4], this.imageData.data[img_index*4+1], this.imageData.data[img_index*4+2]]
+                dist = wpd.colorTools.colorDistance(ref_color, rgb)
+                // dist = Math.sqrt( (this.imageData.data[img_index*4] - ref_color[0])*(this.imageData.data[img_index*4] - ref_color[0]) +
+                //     (this.imageData.data[img_index*4+1] - ref_color[1])*(this.imageData.data[img_index*4+1] - ref_color[1]) +
+                //     (this.imageData.data[img_index*4+2] - ref_color[2])*(this.imageData.data[img_index*4+2] - ref_color[2]));
 
                 if(this.colorDetectionMode === 'fg') {
                     if(dist <= this.colorDistance) {
