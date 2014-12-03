@@ -281,7 +281,7 @@ wpd.colorTools = (function () {
   // Based on easyRGB but the pseudocode was a little unclear
   // If not working, switch back to cie1994
   function cie2000(lab1, lab2) {
-      var WHTL = 1.1
+      var WHTL = 1
       var WHTC = 1
       var WHTH = 1
       var lab1 = {l: lab1[0], a: lab1[1], b: lab1[2]};
